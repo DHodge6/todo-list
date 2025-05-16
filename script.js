@@ -6,27 +6,33 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load tasks from localStorage
     function loadTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        tasks.forEach(task => addTaskToList(task));
-    }
-    
-    // Save tasks to localStorage
-    function saveTasks() {
-        const tasks = [];
-        document.querySelectorAll('#taskList li span').forEach(task => {
-            tasks.push(task.textContent);
-        });
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
-    
-    // Add a task to the list
-    function addTaskToList(taskText) {
+        tasks.forEach(task => {
+            if (typeof task === 'string') {
+                // Handle old format (just in case)
+                addTaskToList(task);
+            } else {
+                // Handle new format with categories
+                addTaskToListWithCategory(task.text, task.category);
+            }
+        });  // This should be the closing of forEach
+    }  // This should be the closing of loadTasks
+
+    // Add task with category helper function
+    function addTaskToListWithCategory(taskText, category) {
         if (taskText.trim() === '') return;
         
         const li = document.createElement('li');
+        li.className = category;
         
         const span = document.createElement('span');
         span.textContent = taskText;
         li.appendChild(span);
+        
+        // Add a category badge
+        const badge = document.createElement('small');
+        badge.textContent = category;
+        badge.className = 'category-badge';
+        li.appendChild(badge);
         
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = 'Delete';
@@ -38,24 +44,30 @@ document.addEventListener('DOMContentLoaded', function() {
         li.appendChild(deleteBtn);
         
         taskList.appendChild(li);
-        saveTasks();
     }
     
-    // Add task when button is clicked
-    addButton.addEventListener('click', function() {
-        addTaskToList(taskInput.value);
-        taskInput.value = '';
-        taskInput.focus();
-    });
+    // Save tasks to localStorage
+    function saveTasks() {
+        const tasks = [];
+        document.querySelectorAll('#taskList li').forEach(taskItem => {
+            tasks.push({
+                text: taskItem.querySelector('span').textContent,
+                category: taskItem.className
+            });
+        });
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
     
-    // Add task when Enter key is pressed
-    taskInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            addTaskToList(taskInput.value);
-            taskInput.value = '';
-        }
-    });
-    
-    // Load tasks when page loads
-    loadTasks();
-});
+    // Add task to the list
+    function addTaskToList(taskText) {
+        if (taskText.trim() === '') return;
+        
+        // Get the selected category
+        const category = document.getElementById('categorySelect').value;
+        
+        const li = document.createElement('li');
+        li.className = category; // Add the category as a class
+        
+        const span = document.createElement('span');
+        span.textContent = taskText;
+        li.appendChild(span);

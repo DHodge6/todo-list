@@ -22,13 +22,14 @@ h1 {
 .todo-input {
     display: flex;
     margin-bottom: 20px;
+    gap: 5px; /* Adds some space between elements */
 }
 
 input {
     flex-grow: 1;
     padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 4px 0 0 4px;
+    border-radius: 4px;
     font-size: 16px;
 }
 
@@ -37,7 +38,7 @@ button {
     background: #4caf50;
     color: white;
     border: none;
-    border-radius: 0 4px 4px 0;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
 }
@@ -52,10 +53,11 @@ ul {
 }
 
 li {
-    padding: 10px;
+    padding: 10px 10px 10px 12px; /* Added left padding */
     border-bottom: 1px solid #eee;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 li:hover {
@@ -68,4 +70,42 @@ li:hover {
     border: none;
     cursor: pointer;
     font-size: 16px;
+    margin-left: auto; /* Pushes button to the right */
+}
+
+/* Style for the category dropdown */
+#categorySelect {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    min-width: 100px; /* Ensures dropdown has a reasonable width */
+}
+
+/* Give each task a colored indicator based on category */
+li.personal {
+    border-left: 4px solid #4caf50; /* Green */
+}
+
+li.work {
+    border-left: 4px solid #2196F3; /* Blue */
+}
+
+li.shopping {
+    border-left: 4px solid #ff9800; /* Orange */
+}
+
+li.health {
+    border-left: 4px solid #e91e63; /* Pink */
+}
+
+/* Style for the category badge */
+.category-badge {
+    background-color: #f1f1f1;
+    border-radius: 12px;
+    padding: 3px 8px;
+    font-size: 12px;
+    margin-left: 8px;
+    color: #555;
 }
